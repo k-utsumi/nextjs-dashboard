@@ -5,6 +5,30 @@ import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
 
+const themeClass = {
+	color: {
+		base: "text-blue-500",
+		hover: "hover:text-blue-400",
+	},
+	bg: {
+		base: "bg-blue-500",
+		hover: "hover:bg-blue-400",
+	},
+};
+const linkClass = `${themeClass.color.base} ${themeClass.color.hover}`;
+const buttonClass = {
+	base: "flex items-center text-white font-medium transition-colors",
+	theme: {
+		primary: `${themeClass.bg.base} ${themeClass.bg.hover}`,
+	},
+	size: {
+		md: "gap-5 rounded-lg px-6 py-3 text-sm md:text-base",
+	},
+	compose(value: "md" = "md", theme: "primary" = "primary") {
+		return `${this.base} ${this.theme[theme]} ${this.size[value]}`;
+	},
+};
+
 export default function Page() {
 	return (
 		<main className="flex min-h-screen flex-col p-6">
@@ -21,14 +45,14 @@ export default function Page() {
 						className={`${lusitana.className} text-xl text-gray-800 md:text-3xl md:leading-normal`}
 					>
 						<strong>Welcome to Acme.</strong> This is the example for the{" "}
-						<a href="https://nextjs.org/learn/" className="text-blue-500">
+						<a href="https://nextjs.org/learn/" className={linkClass}>
 							Next.js Learn Course
 						</a>
 						, brought to you by Vercel.
 					</p>
 					<Link
 						href="/login"
-						className="justify-self-start flex items-center gap-5 rounded-lg bg-blue-500 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-blue-400 md:text-base"
+						className={`justify-self-start ${buttonClass.compose("md")}`}
 					>
 						<span>Log in</span> <ArrowRightIcon className="w-5 md:w-6" />
 					</Link>
