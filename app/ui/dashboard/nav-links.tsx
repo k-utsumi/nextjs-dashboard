@@ -40,26 +40,35 @@ const buttonClass = {
 	},
 };
 
+const NavLink: React.FC<{
+	isActive: boolean;
+	href: string;
+	children: React.ReactNode;
+}> = ({ isActive, href, children, ..._props }) => {
+	const props = { ..._props, className: buttonClass.compose(isActive) };
+
+	return isActive ? (
+		<a {...props}>{children}</a>
+	) : (
+		<Link {...props} href={href}>
+			{children}
+		</Link>
+	);
+};
+
 export default function NavLinks() {
 	const pathname = usePathname();
 
 	return (
-		<>
-			{links.map((link) => {
-				const isActive = pathname === link.href;
-				const LinkIcon = link.icon;
-
-				return (
-					<Link
-						key={link.name}
-						href={link.href}
-						className={buttonClass.compose(isActive)}
-					>
-						<LinkIcon className="w-6" />
-						<p className="hidden md:block">{link.name}</p>
-					</Link>
-				);
-			})}
-		</>
+		<ul className="grow flex md:flex-col md:grow-0 gap-2 text-sm font-medium">
+			{links.map((item) => (
+				<li key={item.name} className="grow">
+					<NavLink isActive={pathname === item.href} href={item.href}>
+						<item.icon className="w-6" />
+						<p className="hidden md:block">{item.name}</p>
+					</NavLink>
+				</li>
+			))}
+		</ul>
 	);
 }
