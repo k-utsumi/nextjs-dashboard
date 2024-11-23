@@ -4,11 +4,12 @@ import { db } from "@vercel/postgres";
 const client = await db.connect();
 
 async function listInvoices() {
+	// NOTE: 文字列はシングルクォートで囲う
 	const data = await client.sql`
-		SELECT invoices.amount, customers.name
+		SELECT customers.name, invoices.amount
 		FROM invoices
 		JOIN customers ON invoices.customer_id = customers.id
-		WHERE invoices.amount = 666;
+		WHERE invoices.status = 'paid';
 	`;
 
 	return data.rows;
