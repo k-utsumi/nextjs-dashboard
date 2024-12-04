@@ -21,13 +21,23 @@ export default async function Page() {
 				</Suspense>
 			</div>
 			<div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-4 lg:grid-cols-8">
-				<Suspense fallback={<RevenueChartSkeleton />}>
-					<RevenueChart />
-				</Suspense>
+				<div className="flex flex-col md:col-span-4">
+					<h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+						Recent Revenue
+					</h2>
+					<Suspense fallback={<RevenueChartSkeleton />}>
+						<RevenueChart />
+					</Suspense>
+				</div>
 
-				<Suspense fallback={<LatestInvoicesSkeleton />}>
-					<LatestInvoices />
-				</Suspense>
+				<div className="flex flex-col md:col-span-4">
+					<h2 className={`${lusitana.className} mb-4 text-xl md:text-2xl`}>
+						Latest Invoices
+					</h2>
+					<Suspense fallback={<LatestInvoicesSkeleton />}>
+						<LatestInvoices />
+					</Suspense>
+				</div>
 			</div>
 		</main>
 	);

@@ -55,7 +55,7 @@ export function Card({ title, value, type }: CardProps) {
 	const Icon = iconMap[type];
 
 	return (
-		<div className="rounded-xl bg-gray-50 p-2 shadow-sm">
+		<div className="flex flex-col rounded-xl bg-gray-50 p-2 shadow-sm">
 			<header className="flex gap-2 p-4">
 				{Icon ? <Icon className="h-5 w-5 text-gray-700" /> : null}
 				<h3 className="text-sm font-medium">{title}</h3>
@@ -63,7 +63,7 @@ export function Card({ title, value, type }: CardProps) {
 
 			<p
 				className={`${lusitana.className}
-          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl`}
+          truncate rounded-xl bg-white px-4 py-8 text-center text-2xl mt-auto`}
 			>
 				{value}
 			</p>
