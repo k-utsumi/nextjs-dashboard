@@ -4,52 +4,58 @@ import { generatePagination } from "@/app/lib/utils";
 import { ArrowLeftIcon, ArrowRightIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Pagination({ totalPages }: { totalPages: number }) {
-	// NOTE: Uncomment this code in Chapter 11
-
-	// const allPages = generatePagination(currentPage, totalPages);
+	const pathname = usePathname();
+	const searchParams = useSearchParams();
+	const currentPage = Number(searchParams.get("page")) || 1;
+	const allPages = generatePagination(currentPage, totalPages);
 
 	return (
-		<>
-			{/*  NOTE: Uncomment this code in Chapter 11 */}
+		<div className="inline-flex">
+			<PaginationArrow
+				state="previous"
+				href={pageURL(currentPage - 1)}
+				isDisabled={currentPage <= 1}
+			/>
 
-			{/* <div className="inline-flex">
-        <PaginationArrow
-          direction="left"
-          href={createPageURL(currentPage - 1)}
-          isDisabled={currentPage <= 1}
-        />
+			<div className="flex -space-x-px">
+				{allPages.map((page, index) => {
+					let position: "first" | "last" | "single" | "middle" | undefined;
 
-        <div className="flex -space-x-px">
-          {allPages.map((page, index) => {
-            let position: 'first' | 'last' | 'single' | 'middle' | undefined;
+					if (index === 0) position = "first";
+					if (index === allPages.length - 1) position = "last";
+					if (allPages.length === 1) position = "single";
+					if (page === "...") position = "middle";
 
-            if (index === 0) position = 'first';
-            if (index === allPages.length - 1) position = 'last';
-            if (allPages.length === 1) position = 'single';
-            if (page === '...') position = 'middle';
+					return (
+						<PaginationNumber
+							key={page}
+							href={pageURL(page)}
+							page={page}
+							position={position}
+							isActive={currentPage === page}
+						/>
+					);
+				})}
+			</div>
 
-            return (
-              <PaginationNumber
-                key={page}
-                href={createPageURL(page)}
-                page={page}
-                position={position}
-                isActive={currentPage === page}
-              />
-            );
-          })}
-        </div>
-
-        <PaginationArrow
-          direction="right"
-          href={createPageURL(currentPage + 1)}
-          isDisabled={currentPage >= totalPages}
-        />
-      </div> */}
-		</>
+			<PaginationArrow
+				state="next"
+				href={pageURL(currentPage + 1)}
+				isDisabled={currentPage >= totalPages}
+			/>
+		</div>
 	);
+
+	function pageURL(page: number | string) {
+		const params = new URLSearchParams(searchParams);
+
+		page !== 1 ? params.set("page", page.toString()) : params.delete("page");
+
+		return `${pathname}?${params.toString()}`;
+	}
 }
 
 function PaginationNumber({
@@ -83,13 +89,22 @@ function PaginationNumber({
 	);
 }
 
+const paginationArrowLabel = {
+	previous: "Previous page",
+	next: "Next page",
+};
+// biome-ignore format: 整形用
+const paginationArrowIcon = {
+	previous: <ArrowLeftIcon  className="w-4" aria-hidden />,
+	next:     <ArrowRightIcon className="w-4" aria-hidden />,
+};
 function PaginationArrow({
 	href,
-	direction,
+	state,
 	isDisabled,
 }: {
 	href: string;
-	direction: "left" | "right";
+	state: "previous" | "next";
 	isDisabled?: boolean;
 }) {
 	const className = clsx(
@@ -97,23 +112,20 @@ function PaginationArrow({
 		{
 			"pointer-events-none text-gray-300": isDisabled,
 			"hover:bg-gray-100": !isDisabled,
-			"mr-2 md:mr-4": direction === "left",
-			"ml-2 md:ml-4": direction === "right",
+			"mr-2 md:mr-4": state === "previous",
+			"ml-2 md:ml-4": state === "next",
 		},
 	);
 
-	const icon =
-		direction === "left" ? (
-			<ArrowLeftIcon className="w-4" />
-		) : (
-			<ArrowRightIcon className="w-4" />
-		);
-
 	return isDisabled ? (
-		<div className={className}>{icon}</div>
+		<div className={className}>{paginationArrowIcon[state]}</div>
 	) : (
-		<Link className={className} href={href}>
-			{icon}
+		<Link
+			className={className}
+			href={href}
+			aria-label={paginationArrowLabel[state]}
+		>
+			{paginationArrowIcon[state]}
 		</Link>
 	);
 }

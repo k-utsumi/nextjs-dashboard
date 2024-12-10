@@ -1,3 +1,4 @@
+import { fetchInvoiceTotalPages } from "@/app/lib/data";
 import { lusitana } from "@/app/ui/fonts";
 import { CreateInvoice } from "@/app/ui/invoices/buttons";
 import Pagination from "@/app/ui/invoices/pagination";
@@ -18,6 +19,7 @@ export default async function Page(props: PageProps) {
 	const searchParams = await props.searchParams;
 	const query = searchParams?.query || "";
 	const currentPage = Number(searchParams?.page) || 1;
+	const totalPages = await fetchInvoiceTotalPages(query);
 
 	return (
 		<div className="w-full">
@@ -38,7 +40,7 @@ export default async function Page(props: PageProps) {
 				</Suspense>
 			</div>
 			<div className="mt-5 flex w-full justify-center">
-				{/* <Pagination totalPages={totalPages} /> */}
+				<Pagination totalPages={totalPages} />
 			</div>
 		</div>
 	);
