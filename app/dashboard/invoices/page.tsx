@@ -1,7 +1,7 @@
 import { lusitana } from "@/app/ui/fonts";
 import { CreateInvoice } from "@/app/ui/invoices/buttons";
 import Pagination from "@/app/ui/invoices/pagination";
-import Table from "@/app/ui/invoices/table";
+import InvoicesTable from "@/app/ui/invoices/table";
 import Search from "@/app/ui/search";
 import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
 import { Suspense } from "react";
@@ -28,9 +28,15 @@ export default async function Page(props: PageProps) {
 				<Search placeholder="Search invoices..." />
 				<CreateInvoice />
 			</div>
-			<Suspense key={query + currentPage} fallback={<InvoicesTableSkeleton />}>
-				<Table query={query} currentPage={currentPage} />
-			</Suspense>
+			{/* HACK: Chrome では relative が無いと body？が横スクロールできてしまう */}
+			<div className="px-6 md:px-12 -mx-6 md:-mx-12 overflow-auto relative">
+				<Suspense
+					key={query + currentPage}
+					fallback={<InvoicesTableSkeleton />}
+				>
+					<InvoicesTable query={query} currentPage={currentPage} />
+				</Suspense>
+			</div>
 			<div className="mt-5 flex w-full justify-center">
 				{/* <Pagination totalPages={totalPages} /> */}
 			</div>
