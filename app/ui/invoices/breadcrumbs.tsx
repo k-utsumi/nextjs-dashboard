@@ -7,30 +7,25 @@ interface Breadcrumb {
 	href: string;
 	active?: boolean;
 }
-
-export default function Breadcrumbs({
-	breadcrumbs,
-}: {
+interface Props {
 	breadcrumbs: Breadcrumb[];
-}) {
-	return (
-		<nav aria-label="Breadcrumb" className="mb-6 block">
-			<ol className={clsx(lusitana.className, "flex text-xl md:text-2xl")}>
-				{breadcrumbs.map((breadcrumb, index) => (
-					<li
-						key={breadcrumb.href}
-						aria-current={breadcrumb.active}
-						className={clsx(
-							breadcrumb.active ? "text-gray-900" : "text-gray-500",
-						)}
-					>
-						<Link href={breadcrumb.href}>{breadcrumb.label}</Link>
-						{index < breadcrumbs.length - 1 ? (
-							<span className="mx-3 inline-block">/</span>
-						) : null}
-					</li>
-				))}
-			</ol>
-		</nav>
-	);
 }
+
+export const Breadcrumbs = ({ breadcrumbs }: Props) => (
+	<nav aria-label="Breadcrumb" className="mb-6">
+		<ol className={clsx(lusitana.className, "flex text-xl md:text-2xl")}>
+			{breadcrumbs.map(({ label, href, active }, i) => (
+				<li
+					key={href}
+					aria-current={active}
+					className={clsx(active ? "text-gray-900" : "text-gray-500")}
+				>
+					<Link href={href}>{label}</Link>
+					{i < breadcrumbs.length - 1 ? (
+						<span className="mx-3 inline-block">/</span>
+					) : null}
+				</li>
+			))}
+		</ol>
+	</nav>
+);
