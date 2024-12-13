@@ -32,8 +32,7 @@ export async function createInvoice(formData: FormData) {
 		VALUES (${customerId}, ${toCents(amount)}, ${status}, ${date})
 	`;
 
-	revalidatePath("/dashboard/invoices");
-	redirect("/dashboard/invoices");
+	revalidateNext({ target: "invoices", redirect: true });
 }
 
 export async function updateInvoice(id: string, formData: FormData) {
@@ -49,12 +48,22 @@ export async function updateInvoice(id: string, formData: FormData) {
         WHERE id = ${id}
     `;
 
-	revalidatePath("/dashboard/invoices");
-	redirect("/dashboard/invoices");
+	revalidateNext({ target: "invoices", redirect: true });
 }
 
 export async function deleteInvoice(id: string) {
 	await sql`DELETE FROM invoices WHERE id = ${id}`;
 
-	revalidatePath("/dashboard/invoices");
+	revalidateNext({ target: "invoices" });
+}
+
+interface RevalidateNextOptions {
+	target: "invoices";
+	/** revalidate の後にリダイレクト */
+	redirect?: boolean;
+}
+const revalidateNextTo = { invoices: "/dashboard/invoices" };
+function revalidateNext({ target, redirect: r }: RevalidateNextOptions) {
+	revalidatePath(revalidateNextTo[target]);
+	r && redirect(revalidateNextTo[target]);
 }
