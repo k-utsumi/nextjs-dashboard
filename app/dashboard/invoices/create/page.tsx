@@ -4,7 +4,7 @@ import { CreateForm } from "@/app/ui/invoices/create-form";
 
 const breadcrumbs = [
 	{ label: "Invoices", href: "/dashboard/invoices" },
-	{ label: "Create Invoice", href: "/dashboard/invoices/create", active: true },
+	{ label: "Create Invoice" },
 ];
 
 export default async function Page() {
