@@ -27,5 +27,20 @@
 		"formatter": {
 			"quoteStyle": "double"
 		}
-	}
+	},
+	"overrides": [
+		// NOTE: Biome では Error の定義がエラーになる
+		// ESLint は対象外なので問題ないが、指定としてはベターな印象なので特定ファイルに絞ってルールを上書きする。
+		//
+		// refs:
+		// - [ESLint](https://github.com/eslint/eslint/blob/90c1db9/lib/rules/no-shadow-restricted-names.js#L45)
+		// - [Biome](https://github.com/biomejs/biome/blob/383a66a/crates/biome_js_analyze/src/lint/suspicious/no_shadow_restricted_names.rs#L59)
+		//   - https://github.com/biomejs/biome/blob/383a66a/crates/biome_js_analyze/src/globals/javascript/language.rs#L4-L15
+		{
+			"include": ["app/**/error.tsx"],
+			"linter": {
+				"rules": { "suspicious": { "noShadowRestrictedNames": "off" } }
+			}
+		}
+	]
 }
