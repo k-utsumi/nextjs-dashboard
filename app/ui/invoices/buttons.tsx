@@ -38,7 +38,6 @@ export function DeleteInvoice({ id }: { id: string }) {
 
 	return (
 		<form action={formAction}>
-			{/* biome-ignore lint/a11y/useButtonType: [type="submit"] 書きたくない */}
 			<button
 				className="rounded-md border p-2 hover:bg-gray-100"
 				aria-label={label}
