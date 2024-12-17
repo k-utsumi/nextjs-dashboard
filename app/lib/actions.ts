@@ -27,10 +27,14 @@ export async function createInvoice(formData: FormData) {
 	});
 	const date = new Date().toISOString().split("T")[0];
 
-	await sql`
-		INSERT INTO invoices (customer_id, amount, status, date)
-		VALUES (${customerId}, ${toCents(amount)}, ${status}, ${date})
-	`;
+	try {
+		await sql`
+			INSERT INTO invoices (customer_id, amount, status, date)
+			VALUES (${customerId}, ${toCents(amount)}, ${status}, ${date})
+		`;
+	} catch (error) {
+		return { message: "Database Error: Failed to Create Invoice." };
+	}
 
 	revalidateNext({ target: "invoices", redirect: true });
 }
@@ -42,19 +46,28 @@ export async function updateInvoice(id: string, formData: FormData) {
 		status: formData.get("status"),
 	});
 
-	await sql`
-        UPDATE invoices
-        SET customer_id = ${customerId}, amount = ${toCents(amount)}, status = ${status}
-        WHERE id = ${id}
-    `;
+	try {
+		await sql`
+			UPDATE invoices
+			SET customer_id = ${customerId}, amount = ${toCents(amount)}, status = ${status}
+			WHERE id = ${id}
+		`;
+	} catch (error) {
+		return { message: "Database Error: Failed to Update Invoice." };
+	}
 
 	revalidateNext({ target: "invoices", redirect: true });
 }
 
 export async function deleteInvoice(id: string) {
-	await sql`DELETE FROM invoices WHERE id = ${id}`;
+	try {
+		await sql`DELETE FROM invoices WHERE id = ${id}`;
+	} catch (error) {
+		return { message: "Database Error: Failed to Delete Invoice." };
+	}
 
 	revalidateNext({ target: "invoices" });
+	return { message: "Deleted Invoice." };
 }
 
 interface RevalidateNextOptions {
