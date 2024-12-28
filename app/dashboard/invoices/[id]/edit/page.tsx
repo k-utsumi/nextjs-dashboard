@@ -1,6 +1,7 @@
 import { fetchCustomers, fetchInvoiceById } from "@/app/lib/data";
 import { Breadcrumbs } from "@/app/ui/invoices/breadcrumbs";
 import { EditForm } from "@/app/ui/invoices/edit-form";
+import { notFound } from "next/navigation";
 
 const breadcrumbs = [
 	{ label: "Invoices", href: "/dashboard/invoices" },
@@ -20,6 +21,10 @@ export default async function Page({ params }: PageProps) {
 		fetchInvoiceById(id),
 		fetchCustomers(),
 	]);
+
+	if (!invoice) {
+		notFound();
+	}
 
 	return (
 		<main>
