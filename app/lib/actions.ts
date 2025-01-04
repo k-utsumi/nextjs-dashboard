@@ -9,7 +9,7 @@ import { z } from "zod";
 const toCents = (amount: number) => amount * 100;
 
 const INVOICE_STATUSES = ["pending", "paid"] as const;
-const FormSchema = z.object({
+const Invoice = z.object({
 	id: z.string(),
 	customerId: z.string({
 		invalid_type_error: "Please select a customer.",
@@ -23,15 +23,15 @@ const FormSchema = z.object({
 	date: z.string(),
 });
 
-const CreateInvoice = FormSchema.omit({ id: true, date: true });
-const UpdateInvoice = FormSchema.omit({ id: true, date: true });
+const CreateInvoice = Invoice.omit({ id: true, date: true });
+const UpdateInvoice = Invoice.omit({ id: true, date: true });
 
 type InvoiceFieldKey = "customerId" | "amount" | "status";
 interface InvoiceErrorState {
-	errors?: Partial<Record<InvoiceFieldKey, string[]>>;
-	message?: string;
 	/** エラー時の入力値保持 */
 	formData?: FormData;
+	message?: string;
+	fieldErrors?: Partial<Record<InvoiceFieldKey, string[]>>;
 }
 export type InvoiceState = InvoiceErrorState | undefined;
 
@@ -48,11 +48,10 @@ export async function createInvoice(
 
 	// If form validation fails, return errors early. Otherwise, continue.
 	if (!validatedFields.success) {
-		return {
-			errors: validatedFields.error.flatten().fieldErrors,
-			message: "Missing Fields. Failed to Create Invoice.",
-			formData,
-		};
+		const message = "Missing Fields. Failed to Create Invoice.";
+		const { fieldErrors } = validatedFields.error.flatten();
+
+		return { formData, message, fieldErrors };
 	}
 
 	// Prepare data for insertion into the database
@@ -66,11 +65,10 @@ export async function createInvoice(
 			VALUES (${customerId}, ${toCents(amount)}, ${status}, ${date})
 		`;
 	} catch (_error) {
+		const message = "Database Error: Failed to Create Invoice.";
+
 		// If a database error occurs, return a more specific error.
-		return {
-			message: "Database Error: Failed to Create Invoice.",
-			formData,
-		};
+		return { formData, message };
 	}
 
 	// Revalidate the cache for the invoices page and redirect the user.

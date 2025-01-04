@@ -69,7 +69,7 @@ export const CreateForm = ({ customers }: Props) => {
 						<UserCircleIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500" />
 					</div>
 					<div id="customer-error" aria-live="polite" aria-atomic="true">
-						{state?.errors?.customerId?.map((error: string) => (
+						{state?.fieldErrors?.customerId?.map((error: string) => (
 							<p className="mt-2 text-sm text-red-500" key={error}>
 								{error}
 							</p>
@@ -98,7 +98,7 @@ export const CreateForm = ({ customers }: Props) => {
 						</div>
 					</div>
 					<div id="amount-error" aria-live="polite" aria-atomic="true">
-						{state?.errors?.amount?.map((error: string) => (
+						{state?.fieldErrors?.amount?.map((error: string) => (
 							<p className="mt-2 text-sm text-red-500" key={error}>
 								{error}
 							</p>
@@ -150,7 +150,7 @@ export const CreateForm = ({ customers }: Props) => {
 						</div>
 					</div>
 					<div id="status-error" aria-live="polite" aria-atomic="true">
-						{state?.errors?.status?.map((error: string) => (
+						{state?.fieldErrors?.status?.map((error: string) => (
 							<p className="mt-2 text-sm text-red-500" key={error}>
 								{error}
 							</p>
