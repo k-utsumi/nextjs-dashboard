@@ -1,6 +1,22 @@
 {
-  "extends": [
-    "next/core-web-vitals",
-    "next/typescript"
-  ]
+	"extends": ["next/core-web-vitals", "next/typescript"],
+	"rules": {
+		// 短絡評価と三項演算子で式を利用可能に
+		"@typescript-eslint/no-unused-expressions": [
+			"error",
+			{ "allowShortCircuit": true, "allowTernary": true }
+		],
+		"@typescript-eslint/no-unused-vars": [
+			"error",
+			{
+				"args": "all",
+				"argsIgnorePattern": "^_",
+				"caughtErrors": "all",
+				"caughtErrorsIgnorePattern": "^_",
+				"destructuredArrayIgnorePattern": "^_",
+				"varsIgnorePattern": "^_",
+				"ignoreRestSiblings": true
+			}
+		]
+	}
 }
