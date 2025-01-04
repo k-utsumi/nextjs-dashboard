@@ -22,7 +22,10 @@ export const CreateForm = ({ customers }: Props) => {
 	formData.append("customerId", "");
 	const initialState: InvoiceState = { formData };
 
-	const [state, formAction] = useActionState(createInvoice, initialState);
+	const [state, formAction, isPending] = useActionState(
+		createInvoice,
+		initialState,
+	);
 
 	const formRef = useRef(null);
 	const handleSubmit = (event: React.FormEvent) => {
@@ -162,7 +165,9 @@ export const CreateForm = ({ customers }: Props) => {
 				>
 					Cancel
 				</Link>
-				<Button type="submit">Create Invoice</Button>
+				<Button type="submit" disabled={isPending && true}>
+					Create Invoice
+				</Button>
 			</div>
 		</form>
 	);
