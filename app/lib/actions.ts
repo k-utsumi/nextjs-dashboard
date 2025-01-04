@@ -30,6 +30,8 @@ type InvoiceFieldKey = "customerId" | "amount" | "status";
 interface InvoiceErrorState {
 	errors?: Partial<Record<InvoiceFieldKey, string[]>>;
 	message?: string;
+	/** エラー時の入力値保持 */
+	formData?: FormData;
 }
 export type InvoiceState = InvoiceErrorState | undefined;
 
@@ -49,6 +51,7 @@ export async function createInvoice(
 		return {
 			errors: validatedFields.error.flatten().fieldErrors,
 			message: "Missing Fields. Failed to Create Invoice.",
+			formData,
 		};
 	}
 
@@ -64,7 +67,10 @@ export async function createInvoice(
 		`;
 	} catch (_error) {
 		// If a database error occurs, return a more specific error.
-		return { message: "Database Error: Failed to Create Invoice." };
+		return {
+			message: "Database Error: Failed to Create Invoice.",
+			formData,
+		};
 	}
 
 	// Revalidate the cache for the invoices page and redirect the user.
