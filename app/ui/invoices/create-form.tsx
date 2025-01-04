@@ -10,7 +10,7 @@ import {
 	UserCircleIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import { useActionState } from "react";
+import { startTransition, useActionState, useRef } from "react";
 
 interface Props {
 	customers: CustomerField[];
@@ -24,8 +24,16 @@ export const CreateForm = ({ customers }: Props) => {
 
 	const [state, formAction] = useActionState(createInvoice, initialState);
 
+	const formRef = useRef(null);
+	const handleSubmit = (event: React.FormEvent) => {
+		event.preventDefault();
+		const form = formRef.current;
+		// NOTE: 直接 formAction を実行するとエラーが出ます
+		form && startTransition(() => formAction(new FormData(form)));
+	};
+
 	return (
-		<form action={formAction}>
+		<form onSubmit={handleSubmit} ref={formRef}>
 			<div className="max-md:rounded-md bg-gray-50 p-4 md:p-6">
 				{state?.message && (
 					<p className="mb-4">
@@ -34,7 +42,6 @@ export const CreateForm = ({ customers }: Props) => {
 				)}
 
 				{/* Customer Name */}
-				{/* FIXME: エラー時に値を復帰できない */}
 				<div className="mb-4">
 					<label htmlFor="customer" className="mb-2 block text-sm font-medium">
 						Choose customer
