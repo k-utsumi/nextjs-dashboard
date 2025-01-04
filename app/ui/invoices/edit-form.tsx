@@ -24,6 +24,12 @@ export const EditForm = ({ invoice, customers }: Props) => {
 	return (
 		<form action={formAction}>
 			<div className="rounded-md bg-gray-50 p-4 md:p-6">
+				{state?.message && (
+					<p className="mb-4">
+						<strong className="text-red-500">{state.message}</strong>
+					</p>
+				)}
+
 				{/* Customer Name */}
 				<div className="mb-4">
 					<label htmlFor="customer" className="mb-2 block text-sm font-medium">
