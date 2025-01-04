@@ -34,7 +34,7 @@ interface InvoiceErrorState {
 export type InvoiceState = InvoiceErrorState | undefined;
 
 export async function createInvoice(
-	prevState: InvoiceState,
+	_prevState: InvoiceState,
 	formData: FormData,
 ): Promise<InvoiceState> {
 	// Validate form using Zod
@@ -71,7 +71,11 @@ export async function createInvoice(
 	revalidateNext({ target: "invoices", isRedirect: true });
 }
 
-export async function updateInvoice(id: string, formData: FormData) {
+export async function updateInvoice(
+	id: string,
+	_prevState: InvoiceState,
+	formData: FormData,
+): Promise<InvoiceState> {
 	const { customerId, amount, status } = UpdateInvoice.parse({
 		customerId: formData.get("customerId"),
 		amount: formData.get("amount"),
