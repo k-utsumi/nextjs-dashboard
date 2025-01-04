@@ -36,7 +36,7 @@ export async function createInvoice(formData: FormData) {
 		return { message: "Database Error: Failed to Create Invoice." };
 	}
 
-	revalidateNext({ target: "invoices", redirect: true });
+	revalidateNext({ target: "invoices", isRedirect: true });
 }
 
 export async function updateInvoice(id: string, formData: FormData) {
@@ -56,7 +56,7 @@ export async function updateInvoice(id: string, formData: FormData) {
 		return { message: "Database Error: Failed to Update Invoice." };
 	}
 
-	revalidateNext({ target: "invoices", redirect: true });
+	revalidateNext({ target: "invoices", isRedirect: true });
 }
 
 export async function deleteInvoice(id: string) {
@@ -70,13 +70,13 @@ export async function deleteInvoice(id: string) {
 	return { message: "Deleted Invoice." };
 }
 
+const revalidateNextTo = { invoices: "/dashboard/invoices" } as const;
 interface RevalidateNextOptions {
-	target: "invoices";
+	target: keyof typeof revalidateNextTo;
 	/** revalidate の後にリダイレクト */
-	redirect?: boolean;
+	isRedirect?: boolean;
 }
-const revalidateNextTo = { invoices: "/dashboard/invoices" };
-function revalidateNext({ target, redirect: r }: RevalidateNextOptions) {
+function revalidateNext({ target, isRedirect }: RevalidateNextOptions) {
 	revalidatePath(revalidateNextTo[target]);
-	r && redirect(revalidateNextTo[target]);
+	isRedirect && redirect(revalidateNextTo[target]);
 }
