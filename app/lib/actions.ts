@@ -35,10 +35,15 @@ interface InvoiceErrorState {
 }
 export type InvoiceState = InvoiceErrorState | undefined;
 
-export async function createInvoice(
+export type InvoiceAction = (
 	_prevState: InvoiceState,
 	formData: FormData,
-): Promise<InvoiceState> {
+) => Promise<InvoiceState>;
+export type InvoiceActionWithParams<T extends string[]> = (
+	...params: [...T, InvoiceState, FormData]
+) => Promise<InvoiceState>;
+
+export const createInvoice: InvoiceAction = async (_prevState, formData) => {
 	// Validate form using Zod
 	const validatedFields = CreateInvoice.safeParse({
 		customerId: formData.get("customerId"),
@@ -73,13 +78,13 @@ export async function createInvoice(
 
 	// Revalidate the cache for the invoices page and redirect the user.
 	revalidateNext({ target: "invoices", isRedirect: true });
-}
+};
 
-export async function updateInvoice(
-	id: string,
-	_prevState: InvoiceState,
-	formData: FormData,
-): Promise<InvoiceState> {
+export const updateInvoice: InvoiceActionWithParams<[id: string]> = async (
+	id,
+	_prevState,
+	formData,
+): Promise<InvoiceState> => {
 	const validatedFields = UpdateInvoice.safeParse({
 		customerId: formData.get("customerId"),
 		amount: formData.get("amount"),
@@ -108,7 +113,7 @@ export async function updateInvoice(
 	}
 
 	revalidateNext({ target: "invoices", isRedirect: true });
-}
+};
 
 export async function deleteInvoice(id: string) {
 	try {

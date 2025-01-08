@@ -1,7 +1,7 @@
 "use client";
 
-import { type InvoiceState, updateInvoice } from "@/app/lib/actions";
-import type { CustomerField, InvoiceForm } from "@/app/lib/definitions";
+import type { InvoiceState } from "@/app/lib/actions";
+import type { CustomerField } from "@/app/lib/definitions";
 import { Button } from "@/app/ui/button";
 import {
 	CheckIcon,
@@ -12,24 +12,32 @@ import {
 import Link from "next/link";
 import { startTransition, useActionState, useRef } from "react";
 
+/** @note useActionState の型と createInvoice の型をマージした物 */
+type InvoiceAction = (
+	state: InvoiceState,
+	payload: FormData,
+) => Promise<InvoiceState>;
+
+type InvoiceFormType = "create" | "edit";
+const SUBMIT_BUTTON_LABEL: Record<InvoiceFormType, string> = {
+	create: "Create Invoice",
+	edit: "Edit Invoice",
+};
+
 interface Props {
-	invoice: InvoiceForm;
 	customers: CustomerField[];
+	action: InvoiceAction;
+	initialState: InvoiceState;
+	type: InvoiceFormType;
 }
 
-export const EditForm = ({ invoice, customers }: Props) => {
-	const updateInvoiceWithId = updateInvoice.bind(null, invoice.id);
-
-	const formData = new FormData();
-	formData.append("customerId", invoice.customer_id);
-	formData.append("amount", String(invoice.amount));
-	formData.append("status", invoice.status);
-	const initialState: InvoiceState = { formData };
-
-	const [state, formAction, isPending] = useActionState(
-		updateInvoiceWithId,
-		initialState,
-	);
+export const InvoiceForm = ({
+	customers,
+	action,
+	initialState,
+	type,
+}: Props) => {
+	const [state, formAction, isPending] = useActionState(action, initialState);
 
 	const formRef = useRef(null);
 	const handleSubmit = (event: React.FormEvent) => {
@@ -182,7 +190,7 @@ export const EditForm = ({ invoice, customers }: Props) => {
 					Cancel
 				</Link>
 				<Button type="submit" disabled={isPending && true}>
-					Edit Invoice
+					{SUBMIT_BUTTON_LABEL[type]}
 				</Button>
 			</div>
 		</form>
