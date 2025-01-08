@@ -80,11 +80,20 @@ export async function updateInvoice(
 	_prevState: InvoiceState,
 	formData: FormData,
 ): Promise<InvoiceState> {
-	const { customerId, amount, status } = UpdateInvoice.parse({
+	const validatedFields = UpdateInvoice.safeParse({
 		customerId: formData.get("customerId"),
 		amount: formData.get("amount"),
 		status: formData.get("status"),
 	});
+
+	if (!validatedFields.success) {
+		const message = "Missing Fields. Failed to Update Invoice.";
+		const { fieldErrors } = validatedFields.error.flatten();
+
+		return { formData, message, fieldErrors };
+	}
+
+	const { customerId, amount, status } = validatedFields.data;
 
 	try {
 		await sql`
@@ -93,7 +102,9 @@ export async function updateInvoice(
 			WHERE id = ${id}
 		`;
 	} catch (_error) {
-		return { message: "Database Error: Failed to Update Invoice." };
+		const message = "Database Error: Failed to Update Invoice.";
+
+		return { formData, message };
 	}
 
 	revalidateNext({ target: "invoices", isRedirect: true });
