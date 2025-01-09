@@ -37,10 +37,11 @@ export function DeleteInvoice({ id }: { id: string }) {
 	const Icon = !isPending ? TrashIcon : LoadingIcon;
 
 	return (
-		<form action={formAction}>
+		<form onSubmit={!isPending ? formAction : undefined}>
 			<button
 				className="rounded-md border p-2 hover:bg-gray-100"
 				aria-label={label}
+				disabled={isPending}
 			>
 				<Icon className="w-5" aria-hidden="true" />
 			</button>
