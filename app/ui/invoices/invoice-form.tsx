@@ -1,6 +1,6 @@
 "use client";
 
-import type { InvoiceState } from "@/app/lib/actions";
+import type { InvoiceAction, InvoiceState } from "@/app/lib/actions";
 import type { CustomerField } from "@/app/lib/definitions";
 import { Button } from "@/app/ui/button";
 import {
@@ -11,12 +11,6 @@ import {
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { startTransition, useActionState, useRef } from "react";
-
-/** @note useActionState の型と createInvoice の型をマージした物 */
-type InvoiceAction = (
-	state: InvoiceState,
-	payload: FormData,
-) => Promise<InvoiceState>;
 
 type InvoiceFormType = "create" | "edit";
 const SUBMIT_BUTTON_LABEL: Record<InvoiceFormType, string> = {
