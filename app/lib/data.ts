@@ -1,6 +1,7 @@
 import { sql } from "@vercel/postgres";
 import type {
 	CustomerField,
+	CustomerWithImage,
 	CustomersTableType,
 	InvoiceForm,
 	InvoicesTable,
@@ -182,6 +183,25 @@ export async function fetchCustomers() {
 	} catch (err) {
 		console.error("Database Error:", err);
 		throw new Error("Failed to fetch all customers.");
+	}
+}
+
+export async function fetchCustomersWithImage() {
+	try {
+		const data = await sql<CustomerWithImage>`
+			SELECT
+				name,
+				email,
+				image_url
+			FROM customers
+			ORDER BY name ASC
+		`;
+
+		const customers = data.rows;
+		return customers;
+	} catch (err) {
+		console.error("Database Error:", err);
+		throw new Error("Failed to fetch all customers with images.");
 	}
 }
 
