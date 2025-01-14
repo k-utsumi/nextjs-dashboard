@@ -7,19 +7,29 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 
+interface AuthState {
+	formData?: FormData;
+	message?: string;
+}
 export async function authenticate(
-	prevState: string | undefined,
+	_prevState: AuthState | undefined,
 	formData: FormData,
 ) {
 	try {
 		await signIn("credentials", formData);
 	} catch (error) {
 		if (error instanceof AuthError) {
-			switch (error.type) {
-				case "CredentialsSignin":
-					return "Invalid credentials.";
-				default:
-					return "Something went wrong.";
+			const email = `${formData.get("email")}`;
+			{
+				const formData = new FormData();
+				formData.append("email", email);
+
+				switch (error.type) {
+					case "CredentialsSignin":
+						return { formData, message: "Invalid credentials" };
+					default:
+						return { formData, message: "Something went wrong." };
+				}
 			}
 		}
 		throw error;

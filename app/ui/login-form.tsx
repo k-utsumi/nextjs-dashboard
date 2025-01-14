@@ -12,7 +12,7 @@ import { authenticate } from "../lib/actions";
 import { Button } from "./button";
 
 export default function LoginForm() {
-	const [errorMessage, formAction, isPending] = useActionState(
+	const [state, formAction, isPending] = useActionState(
 		authenticate,
 		undefined,
 	);
@@ -38,6 +38,7 @@ export default function LoginForm() {
 								type="email"
 								name="email"
 								placeholder="Enter your email address"
+								defaultValue={state?.formData?.get("email") as string}
 								required
 							/>
 							<AtSymbolIcon className="pointer-events-none absolute left-3 top-1/2 h-[18px] w-[18px] -translate-y-1/2 text-gray-500 peer-focus:text-gray-900" />
@@ -67,10 +68,10 @@ export default function LoginForm() {
 				<Button className="mt-4 w-full" disabled={isPending}>
 					Log in <ArrowRightIcon className="ml-auto h-5 w-5 text-gray-50" />
 				</Button>
-				{errorMessage && (
+				{state && (
 					<p className="flex items-center gap-1 text-red-500 text-sm  mt-3 -mb-8">
 						<ExclamationCircleIcon className="h-5 w-5" />
-						<span className="flex-1">{errorMessage}</span>
+						<span className="flex-1">{state.message}</span>
 					</p>
 				)}
 			</div>
