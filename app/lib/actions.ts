@@ -1,9 +1,30 @@
 "use server";
 
+import { signIn } from "@/auth";
 import { sql } from "@vercel/postgres";
+import { AuthError } from "next-auth";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+
+export async function authenticate(
+	prevState: string | undefined,
+	formData: FormData,
+) {
+	try {
+		await signIn("credentials", formData);
+	} catch (error) {
+		if (error instanceof AuthError) {
+			switch (error.type) {
+				case "CredentialsSignin":
+					return "Invalid credentials.";
+				default:
+					return "Something went wrong.";
+			}
+		}
+		throw error;
+	}
+}
 
 /** @note 浮動小数点以下の値の比較差異が出るのを回避するため、基本は金額はセントに変換する */
 const toCents = (amount: number) => amount * 100;
