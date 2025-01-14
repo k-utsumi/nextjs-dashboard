@@ -1,5 +1,9 @@
 import AcmeLogo from "@/app/ui/acme-logo";
 import LoginForm from "@/app/ui/login-form";
+import type { Metadata } from "next";
+
+const title = "Sign in";
+export const metadata: Metadata = { title };
 
 export default function LoginPage() {
 	return (

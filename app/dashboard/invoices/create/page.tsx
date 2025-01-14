@@ -2,10 +2,14 @@ import { type InvoiceState, createInvoice } from "@/app/lib/actions";
 import { fetchCustomers } from "@/app/lib/data";
 import { Breadcrumbs } from "@/app/ui/invoices/breadcrumbs";
 import { InvoiceForm } from "@/app/ui/invoices/invoice-form";
+import type { Metadata } from "next";
+
+const title = "Create Invoice";
+export const metadata: Metadata = { title };
 
 const breadcrumbs = [
 	{ label: "Invoices", href: "/dashboard/invoices" },
-	{ label: "Create Invoice" },
+	{ label: title },
 ];
 
 const formData = new FormData();

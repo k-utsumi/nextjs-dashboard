@@ -2,11 +2,15 @@ import { type InvoiceState, updateInvoice } from "@/app/lib/actions";
 import { fetchCustomers, fetchInvoiceById } from "@/app/lib/data";
 import { Breadcrumbs } from "@/app/ui/invoices/breadcrumbs";
 import { InvoiceForm } from "@/app/ui/invoices/invoice-form";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+const title = "Edit Invoice";
+export const metadata: Metadata = { title };
 
 const breadcrumbs = [
 	{ label: "Invoices", href: "/dashboard/invoices" },
-	{ label: "Edit Invoice" },
+	{ label: title },
 ];
 
 interface RouteParams {
