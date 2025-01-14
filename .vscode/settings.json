@@ -1,4 +1,7 @@
 {
+	// ref: https://github.com/vuejs/language-tools/pull/4206#issuecomment-2560715046
+	"vue.server.hybridMode": true,
+
 	// ref: https://biomejs.dev/reference/vscode/#usage
 	"editor.codeActionsOnSave": {
 		"quickfix.biome": "explicit",
