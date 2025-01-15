@@ -8,9 +8,8 @@ import { InvoicesTableSkeleton } from "@/app/ui/skeletons";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
-export const metadata: Metadata = {
-	title: "Invoices",
-};
+const title = "Invoices";
+export const metadata: Metadata = { title };
 
 interface SearchParams {
 	query?: string;

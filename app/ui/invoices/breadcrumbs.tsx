@@ -25,7 +25,6 @@ export const Breadcrumbs = ({ breadcrumbs }: Props) => (
 						className={clsx(i > 0 && separatorClass, colorClass)}
 						aria-current={isCurrent}
 					>
-						{i === breadcrumbs.length - 1 && <title>{label}</title>}
 						{href ? <Link href={href}>{label}</Link> : label}
 					</li>
 				);
