@@ -1,5 +1,7 @@
 import { inter } from "@/app/ui/fonts";
 import "@/app/ui/global.css";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
