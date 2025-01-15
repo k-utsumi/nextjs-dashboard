@@ -19,6 +19,8 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
+			{/* NOTE: Safari は SVG ファビコン非対応 */}
+			<link rel="icon" href="/favicon.svg" />
 			<body className={`${inter.className} antialiased`}>
 				{children}
 				<SpeedInsights />
