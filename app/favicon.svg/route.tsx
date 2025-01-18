@@ -1,13 +1,16 @@
 import React from "react";
 import { SiNextdotjs } from "react-icons/si";
-import { isDeployedBranch, isLocalhost } from "../lib/utils";
+import {
+	// isDeployedBranch,
+	isLocalhost,
+} from "../lib/utils";
 
 const color = {
 	localhost: "green",
 	deployedBranch: "goldenrod",
 } as const;
 const environmentColor = (url: string) => {
-	if (isDeployedBranch(url)) return color.deployedBranch;
+	// if (isDeployedBranch(url)) return color.deployedBranch;
 	if (isLocalhost(url)) return color.localhost;
 };
 
