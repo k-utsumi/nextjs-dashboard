@@ -1,12 +1,20 @@
 import React from "react";
 import { SiNextdotjs } from "react-icons/si";
+import { isDeployedBranch, isLocalhost } from "../lib/utils";
+
+const color = {
+	localhost: "green",
+	deployedBranch: "goldenrod",
+} as const;
+const environmentColor = (url: string) => {
+	if (isDeployedBranch(url)) return color.deployedBranch;
+	if (isLocalhost(url)) return color.localhost;
+};
 
 const Icon = SiNextdotjs;
 
 export async function GET(request: Request) {
-	const isLocal = /localhost/.test(request.url);
-
-	const color = isLocal ? "green" : "goldenrod";
+	const color = environmentColor(request.url);
 	const iconProps = { color };
 
 	const ReactDOMServer = await import("react-dom/server");

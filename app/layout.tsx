@@ -2,6 +2,8 @@ import { inter } from "@/app/ui/fonts";
 import "@/app/ui/global.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
+import { headers } from "next/headers";
+import { isDeployedBranch, isLocalhost } from "./lib/utils";
 
 export const metadata: Metadata = {
 	title: {
@@ -12,15 +14,21 @@ export const metadata: Metadata = {
 	metadataBase: new URL("https://next-learn-dashboard.vercel.sh"),
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const host = String((await headers()).get("host"));
+	const showFavicon = isDeployedBranch(host) || isLocalhost(host);
+
 	return (
 		<html lang="en">
-			{/* NOTE: Safari は SVG ファビコン非対応 */}
-			<link rel="icon" href="/favicon.svg" />
+			{showFavicon && (
+				// NOTE: Safari は SVG ファビコン非対応
+				<link rel="icon" href="/favicon.svg" />
+			)}
+
 			<body className={`${inter.className} antialiased`}>
 				{children}
 				<SpeedInsights />

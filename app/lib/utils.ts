@@ -1,5 +1,25 @@
 import type { Revenue } from "./definitions";
 
+/** URL・ホストからデプロイされたブランチか判定する正規表現
+ *
+ * ```txt
+ * <project-name>-<unique-hash>-<scope-slug>.vercel.app
+ * ```
+ *
+ * @see {@link https://vercel.com/docs/deployments/generated-urls#generated-from-git|Generated from Git} | {@link https://vercel.com/docs/deployments/generated-urls|Accessing Deployments through Generated URLs}
+ */
+const deployedBranchUrlRe = new RegExp(
+	`${process.env.VERCEL_PROJECT_NAME}-git-[\\w-\\.]+\\.vercel\\.app`,
+);
+/** URL・ホストからデプロイされたブランチか判定
+ * @param urlOrHost - 判定する URL・ホスト
+ */
+export const isDeployedBranch = (urlOrHost: string) =>
+	!!urlOrHost.match(deployedBranchUrlRe);
+
+/** @param urlOrHost - 判定する URL・ホスト */
+export const isLocalhost = (urlOrHost: string) => /localhost/.test(urlOrHost);
+
 export const formatCurrency = (amount: number) => {
 	return (amount / 100).toLocaleString("en-US", {
 		style: "currency",
