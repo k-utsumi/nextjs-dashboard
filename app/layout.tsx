@@ -2,7 +2,6 @@ import { inter } from "@/app/ui/fonts";
 import "@/app/ui/global.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 
 export const metadata: Metadata = {
 	title: {
@@ -18,8 +17,7 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const headersList = await headers();
-	const showFavicon = headersList && false;
+	const showFavicon = false;
 
 	return (
 		<html lang="en">
