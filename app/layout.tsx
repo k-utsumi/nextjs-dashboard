@@ -3,7 +3,6 @@ import "@/app/ui/global.css";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { isDeployedBranch, isLocalhost } from "./lib/utils";
 
 export const metadata: Metadata = {
 	title: {
@@ -19,8 +18,10 @@ export default async function RootLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	const host = String((await headers()).get("host"));
-	const showFavicon = isDeployedBranch(host) || isLocalhost(host);
+	const headersList = await headers();
+	const host = String(headersList.get("host"));
+
+	const showFavicon = host.length;
 
 	return (
 		<html lang="en">
