@@ -19,9 +19,7 @@ export default async function RootLayout({
 	children: React.ReactNode;
 }) {
 	const headersList = await headers();
-	const host = String(headersList.get("host"));
-
-	const showFavicon = host.length;
+	const showFavicon = headersList && false;
 
 	return (
 		<html lang="en">
